@@ -11,7 +11,8 @@ enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
   EPRM,
   VRSN,
-  RGB_SLD
+  RGB_SLD,
+  PIPLN
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -26,7 +27,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|  [   |           | Meh  |------+------+------+------+------+--------|
  * | SHIT+( |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl|RShift+)|
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Grv/L1| Meh  |  -   | Left | Right|                                       |  Up  | Down |   ;  |   <  |  >   |
+ *   |Grv/L1| |>   |  -   | Left | Right|                                       |  Up  | Down |   ;  |   <  |  >   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | Alt  |alt+sft|      | Alt  |Hyper |
@@ -44,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,         KC_Q,         KC_W,    KC_E,   KC_R,   KC_T,   KC_AMPR,
         KC_DQUO,        KC_A,         KC_S,    KC_D,   KC_F,   KC_G,
         KC_LSPO,        CTL_T(KC_Z),  KC_X,    KC_C,   KC_V,   KC_B,   KC_LBRACKET,
-        LT(1,KC_GRAVE), MEH_T(KC_NO), KC_MINUS,KC_LEFT,KC_RGHT,
+        LT(1,KC_GRAVE), PIPLN, KC_MINUS,KC_LEFT,KC_RGHT,
                                                ALT_T(KC_APP),  LSFT(KC_LALT),
                                                                KC_DELETE,
                                                KC_SPC,KC_ESCAPE,KC_BSPACE,
@@ -177,6 +178,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case VRSN:
       if (record->event.pressed) {
         SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+      }
+      return false;
+      break;
+    case PIPLN:
+      if (record->event.pressed) {
+        SEND_STRING ("|>");
       }
       return false;
       break;
