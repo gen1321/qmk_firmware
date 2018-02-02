@@ -12,7 +12,8 @@ enum custom_keycodes {
   EPRM,
   VRSN,
   RGB_SLD,
-  PIPLN
+  PIPLN,
+  ARFUNC
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -23,14 +24,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * | TAB    |   Q  |   W  |   E  |   R  |   T  |  &   |           |  |   |   Y  |   U  |   I  |   O  |   P  |   =    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |    "   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |; / L2|   :    |
- * |--------+------+------+------+------+------|  [   |           | Meh  |------+------+------+------+------+--------|
+ * |    "   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  | _/ L2|   :    |
+ * |--------+------+------+------+------+------|  [   |           |  ]   |------+------+------+------+------+--------|
  * | SHIT+( |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl|RShift+)|
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Grv/L1| |>   |  -   | Left | Right|                                       |  Up  | Down |   ;  |   <  |  >   |
+ *   |Grv/L1| |>   |  -   | Left | Right|                                       |  Up  | Down |   ;  |ARFUNC| TG(2) |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        | Alt  |alt+sft|      | Alt  |Hyper |
+ *                                        | Alt  |alt+sft|      | plus |minus |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      | DEL  |       | PgUp |        |      |
  *                                 | Space| ESC  |------|       |------|  WIN   |ENTER |
@@ -45,8 +46,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,         KC_Q,         KC_W,    KC_E,   KC_R,   KC_T,   KC_AMPR,
         KC_DQUO,        KC_A,         KC_S,    KC_D,   KC_F,   KC_G,
         KC_LSPO,        CTL_T(KC_Z),  KC_X,    KC_C,   KC_V,   KC_B,   KC_LBRACKET,
-        LT(1,KC_GRAVE), PIPLN, KC_MINUS,KC_LEFT,KC_RGHT,
-                                               ALT_T(KC_APP),  LSFT(KC_LALT),
+       LT(1,KC_GRAVE),  PIPLN,        KC_MINUS,KC_LEFT,KC_RGHT,
+        ALT_T(KC_NO),  LSFT(KC_LALT),
                                                                KC_DELETE,
                                                KC_SPC,KC_ESCAPE,KC_BSPACE,
         // right hand
@@ -54,8 +55,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              KC_PIPE,     KC_Y,   KC_U,  KC_I,     KC_O,            KC_P,             KC_EQUAL,
                           KC_H,   KC_J,  KC_K,     KC_L,            KC_UNDS,          KC_COLN,
              KC_RBRACKET, KC_N,   KC_M,  KC_COMMA, LT(2, KC_DOT),   CTL_T(KC_SLSH),   KC_RSPC,
-                                  KC_UP, KC_DOWN,  KC_SCOLON,       KC_LABK,          KC_RABK,
-             KC_LALT,        ALL_T(KC_NO),
+                                  KC_UP, KC_DOWN,  KC_SCOLON,       ARFUNC,           TG(1),
+             KC_MINUS,        KC_PLUS,
              KC_PGUP,
              KC_QUOTE, KC_RGUI, KC_ENT
     ),
@@ -184,6 +185,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case PIPLN:
       if (record->event.pressed) {
         SEND_STRING ("|>");
+      }
+      return false;
+      break;
+    case ARFUNC:
+      if (record->event.pressed) {
+          SEND_STRING ("() =>");
       }
       return false;
       break;
